@@ -1,5 +1,5 @@
 const APIFeatures = require('../utils/APIFeatures');
-const Tour = require('../models/tourModel');
+const Post = require('../models/postModel');
 
 //const tours = JSON.parse(fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`));
 exports.aliasTopTours = (req, res, next) => {
@@ -9,7 +9,7 @@ exports.aliasTopTours = (req, res, next) => {
 	next();
 }
 
-exports.getAllTours = async (req, res) => {
+exports.getAllPosts = async (req, res) => {
 	try{
 		// const queryObj = {...req.query};
 		// console.log(queryObj);
@@ -18,7 +18,7 @@ exports.getAllTours = async (req, res) => {
 
 		// const queryStr = JSON.stringify(queryObj).replace(/\b(gt|gte|lt|lte)\b/g, match => `$${match}`);
 
-		// let query = Tour.find(JSON.parse(queryStr));
+		// let query = Post.find(JSON.parse(queryStr));
 
 
 		// 2) SORTING
@@ -47,7 +47,7 @@ exports.getAllTours = async (req, res) => {
 		// query = query.skip(skip).limit(limit);
 
 		// if (req.query.page) {
-		// 	const numTours = await Tour.countDocuments();
+		// 	const numTours = await Post.countDocuments();
 		// 	if (skip >= numTours) {
 		// 		throw new error('this page does not exist');
 		// 	}
@@ -55,20 +55,20 @@ exports.getAllTours = async (req, res) => {
 
 
 		//EXECUTE QUERY
-		const features = new APIFeatures(Tour.find(), req.query)
+		const features = new APIFeatures(Post.find(), req.query)
 			.filter()
 			.sort()
 			.limitFields()
 			.paginate();
 
-		const tours = await features.query;
+		const posts = await features.query;
 
 	
 		res.status(200).json({
 			status:'success',
-			results:tours.length,
+			results:posts.length,
 			data: {
-				tours
+				posts
 			}
 		})	
 	} catch(err) {
@@ -78,29 +78,29 @@ exports.getAllTours = async (req, res) => {
 		})
 	}
 }
-exports.getSpecificTour = async (req, res) => {
-	const tour = await Tour.findById(req.params.id)
+// exports.getSpecificPost = async (req, res) => {
+// 	const Post = await Post.findById(req.params.id)
+// 	try{
+// 		res.status(201).json({
+// 			status:'success',
+// 			data:{
+// 				Post
+// 			}
+// 		})
+// 	} catch (err) {
+// 		res.status(404).json({
+// 			status:'failed',
+// 			message: 'Message not found'
+// 		})
+// 	}
+// }
+exports.newPost = async (req,res) => {
 	try{
-		res.status(201).json({
-			status:'success',
-			data:{
-				tour
-			}
-		})
-	} catch (err) {
-		res.status(404).json({
-			status:'failed',
-			message: 'Tour not found'
-		})
-	}
-}
-exports.newTour = async (req,res) => {
-	try{
-		const newTour = await Tour.create(req.body)
+		const newPost = await Post.create(req.body)
 		res.status(201).json({
 		status:'success',
 		data:{
-			newTour
+			newPost
 		}
 	})
 	} catch (err) {
@@ -110,39 +110,39 @@ exports.newTour = async (req,res) => {
 		})
 	}
 }
-exports.updateTour = async (req, res) => {
-	try{
-		const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-			new:true,
-			runValidators:true
-		})
-		res.status(201).json({
-			status:'success',
-			data:{
-				tour
-			}
-		})
-	} catch (err) {
-		res.status(404).json({
-			status:'failed',
-			message: err
-		})
-	}
-}
-exports.deleteTour = async (req, res) => {
-	try {
-		const id = Number(req.params.id);
-		await Tour.findByIdAndDelete(id);
-		res.status(204).json({
-			status:'success',
-			data: null
-		})
-	} catch(err) {
-		res.status(404).json({
-			status:'failed',
-			message: err
-		})
-	}
-}
+// exports.updatePost = async (req, res) => {
+// 	try{
+// 		const Post = await Post.findByIdAndUpdate(req.params.id, req.body, {
+// 			new:true,
+// 			runValidators:true
+// 		})
+// 		res.status(201).json({
+// 			status:'success',
+// 			data:{
+// 				Post
+// 			}
+// 		})
+// 	} catch (err) {
+// 		res.status(404).json({
+// 			status:'failed',
+// 			message: err
+// 		})
+// 	}
+// }
+// exports.deletePost = async (req, res) => {
+// 	try {
+// 		const id = Number(req.params.id);
+// 		await Post.findByIdAndDelete(id);
+// 		res.status(204).json({
+// 			status:'success',
+// 			data: null
+// 		})
+// 	} catch(err) {
+// 		res.status(404).json({
+// 			status:'failed',
+// 			message: err
+// 		})
+// 	}
+// }
 
 
