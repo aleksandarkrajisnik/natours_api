@@ -1,10 +1,10 @@
 const express = require('express');
 const morgan = require('morgan');
-const messageRouter = require('./routes/messageRoutes');
+const postRouter = require('./routes/postRoutes');
 const userRouter = require('./routes/userRoutes');
 const app = express();
 app.use(express.static(`${__dirname}/public`))
-app.use('/api/v1/posts', messageRouter);
+app.use('/api/v1/posts', postRouter);
 app.use('/api/v1/users', userRouter);
 
 app.use(morgan('dev'));
